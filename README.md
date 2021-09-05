@@ -1,57 +1,26 @@
-# vue-h5-template
+# kd-cli-template
 
-基于 vue-cli4.0 + webpack 4 + vant ui + sass+ rem 适配方案+axios 封装，构建手机端模板脚手架
-
-掘金: [vue-cli4 vant rem 移动端框架方案](https://juejin.im/post/5cfefc73f265da1bba58f9f7)
-
-[查看 demo](https://sunniejs.cn/vue-h5-template/#/) 建议手机端查看
-
-<p>
-  <img src="./static/demo.png" width="320" style="display:inline;">
-</p>
+基于 vue-cli4.0 + webpack 4 + vant ui + sass+ rem 适配方案+axios 封装，构建vue手机端模板脚手架
 
 ### Node 版本要求
 
 `Vue CLI` 需要 Node.js 8.9 或更高版本 (推荐 8.11.0+)。你可以使用 [nvm](https://github.com/nvm-sh/nvm) 或
 [nvm-windows](https://github.com/coreybutler/nvm-windows) 在同一台电脑中管理多个 Node 版本。
 
-本示例 Node.js 12.14.1
+本示例 Node.js 12.16.1
 
 ### 启动项目
 
 ```bash
 
-git clone https://github.com/sunniejs/vue-h5-template.git
-
-cd vue-h5-template
+cd 项目目录
 
 npm install
 
 npm run serve
 ```
 
-<span id="top">目录</span>
-
-- √ Vue-cli4
-- [√ 配置多环境变量](#env)
-- [√ rem 适配方案](#rem)
-- [√ vm 适配方案](#vm)
-- [√ VantUI 组件按需加载](#vant)
-- [√ Sass 全局样式](#sass)
-- [√ Vuex 状态管理](#vuex)
-- [√ Vue-router](#router)
-- [√ Axios 封装及接口管理](#axios)
-- [√ Webpack 4 vue.config.js 基础配置](#base)
-- [√ 配置 alias 别名](#alias)
-- [√ 配置 proxy 跨域](#proxy)
-- [√ 配置 打包分析](#bundle)
-- [√ 配置 externals 引入 cdn 资源 ](#externals)
-- [√ 去掉 console.log ](#console)
-- [√ splitChunks 单独打包第三方模块](#chunks)
-- [√ 添加 IE 兼容 ](#ie)
-- [√ Eslint+Pettier 统一开发规范 ](#pettier)
-
-### <span id="env">✅ 配置多环境变量 </span>
+### 配置多环境变量
 
 `package.json` 里的 `scripts` 配置 `serve` `stage` `build`，通过 `--mode xxx` 来执行不同环境
 
@@ -69,9 +38,9 @@ npm run serve
 
 ##### 配置介绍
 
-&emsp;&emsp;以 `VUE_APP_` 开头的变量，在代码中可以通过 `process.env.VUE_APP_` 访问。  
-&emsp;&emsp;比如,`VUE_APP_ENV = 'development'` 通过`process.env.VUE_APP_ENV` 访问。  
-&emsp;&emsp;除了 `VUE_APP_*` 变量之外，在你的应用代码中始终可用的还有两个特殊的变量`NODE_ENV` 和`BASE_URL`
+以 `VUE_APP_` 开头的变量，在代码中可以通过 `process.env.VUE_APP_` 访问。  
+比如,`VUE_APP_ENV = 'development'` 通过`process.env.VUE_APP_ENV` 访问。  
+除了 `VUE_APP_*` 变量之外，在你的应用代码中始终可用的还有两个特殊的变量`NODE_ENV` 和`BASE_URL`
 
 在项目根目录中新建`.env.*`
 
@@ -119,8 +88,8 @@ module.exports = config
 ```javascript
 // 本地环境配置
 module.exports = {
-  title: 'vue-h5-template',
-  baseUrl: 'http://localhost:9018', // 项目地址
+  title: '系统',
+  baseUrl: 'http://localhost:8080', // 项目地址
   baseApi: 'https://test.xxx.com/api', // 本地api请求地址
   APPID: 'xxx',
   APPSECRET: 'xxx'
@@ -135,11 +104,9 @@ import { baseApi } from '@/config'
 console.log(baseApi)
 ```
 
-[▲ 回顶部](#top)
+###  rem 适配方案 
 
-### <span id="rem">✅ rem 适配方案 </span>
-
-不用担心，项目已经配置好了 `rem` 适配, 下面仅做介绍：
+项目已经配置好了 `rem` 适配, 下面仅做介绍：
 
 Vant 中的样式默认使用`px`作为单位，如果需要使用`rem`单位，推荐使用以下两个工具:
 
@@ -212,7 +179,7 @@ module.exports = {
 
 [▲ 回顶部](#top)
 
-### <span id="vw">✅ vm 适配方案 </span>
+### vm 适配方案
 
 本项目使用的是 rem 的 适配方案，其实无论你使用哪种方案，都不需要你去计算 12px 是多少 rem 或者 vw, 会有专门的工具去帮你做
 。如果你想用 vw，你可以按照下面的方式切换。
@@ -266,9 +233,8 @@ package.json 删除如下代码
 
 运行起来，F12 元素 css 就是 vw 单位了
 
-[▲ 回顶部](#top)
 
-### <span id="vant">✅ VantUI 组件按需加载 </span>
+###  VantUI 组件按需加载
 
 项目采
 用[Vant 自动按需引入组件 (推荐)](https://youzan.github.io/vant/#/zh-CN/quickstart#fang-shi-yi.-zi-dong-an-xu-yin-ru-zu-jian-tui-jian)下
@@ -317,10 +283,7 @@ Vue.use(Cell)
 Vue.use(List)
 Vue.use(Tabbar).use(TabbarItem)
 ```
-
-[▲ 回顶部](#top)
-
-### <span id="sass">✅ Sass 全局样式</span>
+### Sass 全局样式
 
 首先 你可能会遇到 `node-sass` 安装不成功，别放弃多试几次！！！
 
@@ -338,7 +301,7 @@ Vue.use(Tabbar).use(TabbarItem)
 
 #### 目录结构
 
-vue-h5-template 所有全局样式都在 `@/src/assets/css` 目录下设置
+所有全局样式都在 `@/src/assets/css` 目录下设置
 
 ```bash
 ├── assets
@@ -428,9 +391,7 @@ Vue.prototype.$cdn = $cdn
 </style>
 ```
 
-[▲ 回顶部](#top)
-
-### <span id="vuex">✅ Vuex 状态管理</span>
+###  Vuex 状态管理</
 
 目录结构
 
@@ -476,15 +437,11 @@ new Vue({
 </script>
 ```
 
-[▲ 回顶部](#top)
+### Vue-router 
 
-### <span id="router">✅ Vue-router </span>
-
-本案例采用 `hash` 模式，开发者根据需求修改 `mode` `base`
+本工程采用 `hash` 模式，开发者根据需求修改 `mode` `base`
 
 **注意**：如果你使用了 `history` 模式，`vue.config.js` 中的 `publicPath` 要做对应的**修改**
-
-前往:[vue.config.js 基础配置](#base)
 
 ```javascript
 import Vue from 'vue'
@@ -513,11 +470,7 @@ const createRouter = () =>
 export default createRouter()
 ```
 
-更多:[Vue Router](https://router.vuejs.org/zh/)
-
-[▲ 回顶部](#top)
-
-### <span id="axios">✅ Axios 封装及接口管理</span>
+### Axios 封装及接口管理
 
 `utils/request.js` 封装 axios ,开发者需要根据后台接口做修改。
 
@@ -624,9 +577,7 @@ getUserInfo(params)
   .catch(() => {})
 ```
 
-[▲ 回顶部](#top)
-
-### <span id="base">✅ Webpack 4 vue.config.js 基础配置 </span>
+###  Webpack 4 vue.config.js 基础配置
 
 如果你的 `Vue Router` 模式是 hash
 
@@ -651,7 +602,7 @@ module.exports = {
   lintOnSave: !IS_PROD,
   productionSourceMap: false, // 如果你不需要生产环境的 source map，可以将其设置为 false 以加速生产环境构建。
   devServer: {
-    port: 9020, // 端口号
+    port: 8081, // 端口号
     open: false, // 启动后打开浏览器
     overlay: {
       //  当出现编译器错误或警告时，在浏览器中显示全屏覆盖层
@@ -663,9 +614,7 @@ module.exports = {
 }
 ```
 
-[▲ 回顶部](#top)
-
-### <span id="alias">✅ 配置 alias 别名 </span>
+###  配置 alias 别名 
 
 ```javascript
 const path = require('path')
@@ -685,13 +634,7 @@ module.exports = {
 }
 ```
 
-[▲ 回顶部](#top)
-
-### <span id="proxy">✅ 配置 proxy 跨域 </span>
-
-如果你的项目需要跨域设置，你需要打来 `vue.config.js` `proxy` 注释 并且配置相应参数
-
-<u>**!!!注意：你还需要将 `src/config/env.development.js` 里的 `baseApi` 设置成 '/'**</u>
+###   配置 proxy 跨域 
 
 ```javascript
 module.exports = {
@@ -724,9 +667,7 @@ export function getUserInfo(params) {
 }
 ```
 
-[▲ 回顶部](#top)
-
-### <span id="bundle">✅ 配置 打包分析 </span>
+### 配置 打包分析 
 
 ```javascript
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
@@ -749,9 +690,8 @@ module.exports = {
 npm run build
 ```
 
-[▲ 回顶部](#top)
 
-### <span id="externals">✅ 配置 externals 引入 cdn 资源 </span>
+###  配置 externals 引入 cdn 资源
 
 这个版本 CDN 不再引入，我测试了一下使用引入 CDN 和不使用,不使用会比使用时间少。网上不少文章测试 CDN 速度块，这个开发者可
 以实际测试一下。
@@ -836,9 +776,7 @@ module.exports = {
     <% } %>
 ```
 
-[▲ 回顶部](#top)
-
-### <span id="console">✅ 去掉 console.log </span>
+###  去掉 console.log 
 
 保留了测试环境和本地环境的 `console.log`
 
@@ -873,10 +811,8 @@ module.exports = {
 }
 ```
 
-[▲ 回顶部](#top)
 
-### <span id="chunks">✅ splitChunks 单独打包第三方模块</span>
-
+### splitChunks 单独打包第三方模块
 ```javascript
 module.exports = {
   chainWebpack: config => {
@@ -921,9 +857,8 @@ module.exports = {
 }
 ```
 
-[▲ 回顶部](#top)
 
-### <span id="ie">✅ 添加 IE 兼容 </span>
+###  添加 IE 兼容
 
 之前的方式 会报 `@babel/polyfill` is deprecated. Please, use required parts of `core-js` and
 `regenerator-runtime/runtime` separately
@@ -954,9 +889,7 @@ module.exports = {
 }
 ```
 
-[▲ 回顶部](#top)
-
-### <span id="pettier">✅ Eslint + Pettier 统一开发规范 </span>
+###  Eslint + Pettier 统一开发规范 
 
 VScode （版本 1.47.3）安装 `eslint` `prettier` `vetur` 插件 `.vue` 文件使用 vetur 进行格式化，其他使用`prettier`,后面会
 专门写个如何使用配合使用这三个玩意
@@ -1121,28 +1054,8 @@ Vscode setting.json 设置
 }
 
 ```
-
-[▲ 回顶部](#top)
-
 # 鸣谢 ​
 
 [vue-cli4-config](https://github.com/staven630/vue-cli4-config)  
 [vue-element-admin](https://github.com/PanJiaChen/vue-element-admin)
 
-# 关于我
-
-获取更多技术相关文章，关注公众号”前端女塾“。
-
-回复加群，即可加入”前端仙女群“
-
- <p>
-  <img src="./static/gognzhonghao.jpg" width="256" style="display:inline;">
-</p>
-
-扫描添加下方的微信并备注 Sol 加交流群，交流学习，及时获取代码最新动态。
-
-<p>
-  <img src="./static/me.png" width="256" style="display:inline;">
-</p>
- 
-如果对你有帮助送我一颗小星星（づ￣3￣）づ╭❤～
