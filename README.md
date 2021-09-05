@@ -4,8 +4,7 @@
 
 ### Node 版本要求
 
-`Vue CLI` 需要 Node.js 8.9 或更高版本 (推荐 8.11.0+)。你可以使用 [nvm](https://github.com/nvm-sh/nvm) 或
-[nvm-windows](https://github.com/coreybutler/nvm-windows) 在同一台电脑中管理多个 Node 版本。
+`Vue CLI` 需要 Node.js 8.9 或更高版本 (推荐 8.11.0+)。可以使用nvm-windows在同一台电脑中管理多个 Node 版本。
 
 本示例 Node.js 12.16.1
 
@@ -68,15 +67,6 @@ VUE_APP_ENV = 'staging'
 # must start with VUE_APP_
 VUE_APP_ENV = 'production'
 ```
-
-这里我们并没有定义很多变量，只定义了基础的 VUE_APP_ENV `development` `staging` `production`  
-变量我们统一在 `src/config/env.*.js` 里进行管理。
-
-这里有个问题，既然这里有了根据不同环境设置变量的文件，为什么还要去 config 下新建三个对应的文件呢？  
-**修改起来方便，不需要重启项目，符合开发习惯。**
-
-config/index.js
-
 ```javascript
 // 根据环境引入不同配置 process.env.NODE_ENV
 const config = require('./env.' + process.env.VUE_APP_ENV)
@@ -103,136 +93,9 @@ module.exports = {
 import { baseApi } from '@/config'
 console.log(baseApi)
 ```
+### 集成瑞信api
 
-###  rem 适配方案 
-
-项目已经配置好了 `rem` 适配, 下面仅做介绍：
-
-Vant 中的样式默认使用`px`作为单位，如果需要使用`rem`单位，推荐使用以下两个工具:
-
-- [postcss-pxtorem](https://github.com/cuth/postcss-pxtorem) 是一款 `postcss` 插件，用于将单位转化为 `rem`
-- [lib-flexible](https://github.com/amfe/lib-flexible) 用于设置 `rem` 基准值
-
-##### PostCSS 配置
-
-下面提供了一份基本的 `postcss` 配置，可以在此配置的基础上根据项目需求进行修改
-
-```javascript
-// https://github.com/michael-ciniawsky/postcss-load-config
-module.exports = {
-  plugins: {
-    autoprefixer: {
-      overrideBrowserslist: ['Android 4.1', 'iOS 7.1', 'Chrome > 31', 'ff > 31', 'ie >= 8']
-    },
-    'postcss-pxtorem': {
-      rootValue: 37.5,
-      propList: ['*']
-    }
-  }
-}
-```
-
-更多详细信息： [vant](https://youzan.github.io/vant/#/zh-CN/quickstart#jin-jie-yong-fa)
-
-**新手必看，老鸟跳过**
-
-很多小伙伴会问我，适配的问题,因为我们使用的是 Vant UI，所以必须根据 Vant UI 375 的设计规范走，一般我们的设计会将 UI 图上
-传到蓝湖，我们就可以需要的尺寸了。下面就大搞普及一下 rem。
-
-我们知道 `1rem` 等于`html` 根元素设定的 `font-size` 的 `px` 值。Vant UI 设置 `rootValue: 37.5`,你可以看到在 iPhone 6 下
-看到 （`1rem 等于 37.5px`）：
-
-```html
-<html data-dpr="1" style="font-size: 37.5px;"></html>
-```
-
-切换不同的机型，根元素可能会有不同的`font-size`。当你写 css px 样式时，会被程序换算成 `rem` 达到适配。
-
-因为我们用了 Vant 的组件，需要按照 `rootValue: 37.5` 来写样式。
-
-举个例子：设计给了你一张 750px \* 1334px 图片，在 iPhone6 上铺满屏幕,其他机型适配。
-
-- 当`rootValue: 75` , 样式 `width: 750px;height: 1334px;` 图片会撑满 iPhone6 屏幕，这个时候切换其他机型，图片也会跟着撑
-  满。
-- 当`rootValue: 37.5` 的时候，样式 `width: 375px;height: 667px;` 图片会撑满 iPhone6 屏幕。
-
-也就是 iphone 6 下 375px 宽度写 CSS。其他的你就可以根据你设计图，去写对应的样式就可以了。
-
-当然，想要撑满屏幕你可以使用 100%，这里只是举例说明。
-
-```html
-<img class="image" src="https://www.sunniejs.cn/static/weapp/logo.png" />
-
-<style>
-  /* rootValue: 75 */
-  .image {
-    width: 750px;
-    height: 1334px;
-  }
-  /* rootValue: 37.5 */
-  .image {
-    width: 375px;
-    height: 667px;
-  }
-</style>
-```
-
-[▲ 回顶部](#top)
-
-### vm 适配方案
-
-本项目使用的是 rem 的 适配方案，其实无论你使用哪种方案，都不需要你去计算 12px 是多少 rem 或者 vw, 会有专门的工具去帮你做
-。如果你想用 vw，你可以按照下面的方式切换。
-
-#### 1.安装依赖
-
-```bash
-
-npm install postcss-px-to-viewport -D
-
-```
-
-#### 2.修改 .postcssrc.js
-
-将根目录下 .postcssrc.js 文件修改如下
-
-```javascript
-// https://github.com/michael-ciniawsky/postcss-load-config
-module.exports = {
-  plugins: {
-    autoprefixer: {
-      overrideBrowserslist: ['Android 4.1', 'iOS 7.1', 'Chrome > 31', 'ff > 31', 'ie >= 8']
-    },
-    'postcss-px-to-viewport': {
-      viewportWidth: 375, // 视窗的宽度，对应的是我们设计稿的宽度，一般是750
-      unitPrecision: 3, // 指定`px`转换为视窗单位值的小数位数（很多时候无法整除）
-      viewportUnit: 'vw', // 指定需要转换成的视窗单位，建议使用vw
-      selectorBlackList: ['.ignore', '.hairlines'], // 指定不转换为视窗单位的类，可以自定义，可以无限添加,建议定义一至两个通用的类名
-      minPixelValue: 1, // 小于或等于`1px`不转换为视窗单位，你也可以设置为你想要的值
-      mediaQuery: false // 允许在媒体查询中转换`px`
-    }
-  }
-}
-```
-
-#### 3.删除原来的 rem 相关代码
-
-src/main.js 删除如下代码
-
-```javascript
-// 移动端适配
-import 'lib-flexible/flexible.js'
-```
-
-package.json 删除如下代码
-
-```javascript
-"lib-flexible": "^0.3.2",
-"postcss-pxtorem": "^5.1.1",
-```
-
-运行起来，F12 元素 css 就是 vw 单位了
-
+Vue.prototype.$ruixin
 
 ###  VantUI 组件按需加载
 
@@ -274,18 +137,9 @@ module.exports = {
 
 项目在 `src/plugins/vant.js` 下统一管理组件，用哪个引入哪个，无需在页面里重复引用
 
-```javascript
-// 按需全局引入 vant组件
-import Vue from 'vue'
-import { Button, List, Cell, Tabbar, TabbarItem } from 'vant'
-Vue.use(Button)
-Vue.use(Cell)
-Vue.use(List)
-Vue.use(Tabbar).use(TabbarItem)
-```
 ### Sass 全局样式
 
-首先 你可能会遇到 `node-sass` 安装不成功，别放弃多试几次！！！
+如果遇到 `node-sass` 安装不成功，别放弃多试几次！！！
 
 每个页面自己对应的样式都写在自己的 .vue 文件之中 `scoped` 它顾名思义给 css 加了一个域的概念。
 
@@ -340,30 +194,6 @@ Vue.use(Tabbar).use(TabbarItem)
 
 `vue.config.js` 配置使用 `css.loaderOptions` 选项,注入 `sass` 的 `mixin` `variables` 到全局，不需要手动引入 ,配
 置`$cdn`通过变量形式引入 cdn 地址,这样向所有 Sass/Less 样式传入共享的全局变量：
-
-```javascript
-const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV)
-const defaultSettings = require('./src/config/index.js')
-module.exports = {
-  css: {
-    extract: IS_PROD,
-    sourceMap: false,
-    loaderOptions: {
-      // 给 scss-loader 传递选项
-      scss: {
-        // 注入 `sass` 的 `mixin` `variables` 到全局, $cdn可以配置图片cdn
-        // 详情: https://cli.vuejs.org/guide/css.html#passing-options-to-pre-processor-loaders
-        prependData: `
-                @import "assets/css/mixin.scss";
-                @import "assets/css/variables.scss";
-                $cdn: "${defaultSettings.$cdn}";
-                 `
-      }
-    }
-  }
-}
-```
-
 设置 js 中可以访问 `$cdn`,`.vue` 文件中使用`this.$cdn`访问
 
 ```javascript
@@ -391,7 +221,7 @@ Vue.prototype.$cdn = $cdn
 </style>
 ```
 
-###  Vuex 状态管理</
+###  Vuex 状态管理
 
 目录结构
 
@@ -403,72 +233,11 @@ Vue.prototype.$cdn = $cdn
 │   ├── getters.js
 ```
 
-`main.js` 引入
-
-```javascript
-import Vue from 'vue'
-import App from './App.vue'
-import store from './store'
-new Vue({
-  el: '#app',
-  router,
-  store,
-  render: h => h(App)
-})
-```
-
-使用
-
-```html
-<script>
-  import { mapGetters } from 'vuex'
-  export default {
-    computed: {
-      ...mapGetters(['userName'])
-    },
-
-    methods: {
-      // Action 通过 store.dispatch 方法触发
-      doDispatch() {
-        this.$store.dispatch('setUserName', '真乖，赶紧关注公众号，组织都在等你~')
-      }
-    }
-  }
-</script>
-```
-
 ### Vue-router 
 
 本工程采用 `hash` 模式，开发者根据需求修改 `mode` `base`
 
-**注意**：如果你使用了 `history` 模式，`vue.config.js` 中的 `publicPath` 要做对应的**修改**
-
-```javascript
-import Vue from 'vue'
-import Router from 'vue-router'
-
-Vue.use(Router)
-export const router = [
-  {
-    path: '/',
-    name: 'index',
-    component: () => import('@/views/home/index'), // 路由懒加载
-    meta: {
-      title: '首页', // 页面标题
-      keepAlive: false // keep-alive 标识
-    }
-  }
-]
-const createRouter = () =>
-  new Router({
-    // mode: 'history', // 如果你是 history模式 需要配置 vue.config.js publicPath
-    // base: '/app/',
-    scrollBehavior: () => ({ y: 0 }),
-    routes: router
-  })
-
-export default createRouter()
-```
+注意：如果你使用了 `history` 模式，`vue.config.js` 中的 `publicPath` 要做对应的修改
 
 ### Axios 封装及接口管理
 
@@ -477,66 +246,6 @@ export default createRouter()
 - `service.interceptors.request.use` 里可以设置请求头，比如设置 `token`
 - `config.hideloading` 是在 api 文件夹下的接口参数里设置，下文会讲
 - `service.interceptors.response.use` 里可以对接口返回数据处理，比如 401 删除本地信息，重新登录
-
-```javascript
-import axios from 'axios'
-import store from '@/store'
-import { Toast } from 'vant'
-// 根据环境不同引入不同api地址
-import { baseApi } from '@/config'
-// create an axios instance
-const service = axios.create({
-  baseURL: baseApi, // url = base api url + request url
-  withCredentials: true, // send cookies when cross-domain requests
-  timeout: 5000 // request timeout
-})
-
-// request 拦截器 request interceptor
-service.interceptors.request.use(
-  config => {
-    // 不传递默认开启loading
-    if (!config.hideloading) {
-      // loading
-      Toast.loading({
-        forbidClick: true
-      })
-    }
-    if (store.getters.token) {
-      config.headers['X-Token'] = ''
-    }
-    return config
-  },
-  error => {
-    // do something with request error
-    console.log(error) // for debug
-    return Promise.reject(error)
-  }
-)
-// respone拦截器
-service.interceptors.response.use(
-  response => {
-    Toast.clear()
-    const res = response.data
-    if (res.status && res.status !== 200) {
-      // 登录超时,重新登录
-      if (res.status === 401) {
-        store.dispatch('FedLogOut').then(() => {
-          location.reload()
-        })
-      }
-      return Promise.reject(res || 'error')
-    } else {
-      return Promise.resolve(res)
-    }
-  },
-  error => {
-    Toast.clear()
-    console.log('err' + error) // for debug
-    return Promise.reject(error)
-  }
-)
-export default service
-```
 
 #### 接口管理
 
@@ -547,23 +256,6 @@ export default service
 - `method` 请求方法
 - `data` 请求参数 `qs.stringify(params)` 是对数据系列化操作
 - `hideloading` 默认 `false`,设置为 `true` 后，不显示 loading ui 交互中有些接口不需要让用户感知
-
-```javascript
-import qs from 'qs'
-// axios
-import request from '@/utils/request'
-//user api
-
-// 用户信息
-export function getUserInfo(params) {
-  return request({
-    url: '/user/userinfo',
-    method: 'post',
-    data: qs.stringify(params),
-    hideloading: true // 隐藏 loading 组件
-  })
-}
-```
 
 #### 如何调用
 
