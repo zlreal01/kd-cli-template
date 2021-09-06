@@ -23,9 +23,10 @@ import 'lib-flexible/flexible.js'
 import './filters'
 Vue.config.productionTip = false
 
-//ruixin
-let ruixinApi=new RuixinApi();
-Vue.prototype.$ruixin=ruixinApi       //瑞信API
+// 瑞信API
+import RuixinApi from './../static/ruixin/RuixinOpenAPI'
+const ruixinApi = new RuixinApi()
+Vue.prototype.$ruixin = ruixinApi
 
 new Vue({
   el: '#app',

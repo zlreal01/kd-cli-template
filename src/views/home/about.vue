@@ -6,18 +6,14 @@
         <div class="logo"></div>
         <div class="demo-home__title">VUE H5开发模板</div>
         <div class="item">
-          项目地址:
-          <a href="https://github.com/sunniejs/vue-h5-template">https://github.com/sunniejs/vue-h5-template</a>
+         VUE H5开发模板
         </div>
-        <div class="item">项目作者: sunnie</div>
-        <div class="item"></div>
-        <div class="wechat">
-          <img :src="this.wechat" alt="" />
-        </div>
-        <div class="item">关注公众号：回复“加群”即可加 前端仙女群</div>
+        <div class="item">VUE H5开发模板</div>
+        <div class="item">VUE H5开发模板</div>
+        <div class="item">VUE H5开发模板</div>
         <div class="item">
           {{ userName }}
-          <van-button v-if="userName == ''" type="warning" size="small" @click="doDispatch">快点我~</van-button>
+          <van-button v-if="userName == ''" type="warning" size="small" @click="doDispatch">按钮</van-button>
         </div>
       </div>
     </div>
@@ -31,7 +27,6 @@ import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
-      wechat: `${this.$cdn}/wx/640.gif`
     }
   },
   computed: {
@@ -51,10 +46,10 @@ export default {
     },
     // Action 通过 store.dispatch 方法触发
     doDispatch() {
-      this.$store.dispatch('setUserName', '真乖，赶紧关注公众号，组织都在等你~')
+      this.$store.dispatch('setUserName', '点击完成')
     },
     goGithub(index) {
-      window.location.href = 'https://github.com/sunniejs/vue-h5-template'
+      window.location.href = 'test'
     }
   }
 }
@@ -97,7 +92,7 @@ export default {
       .logo {
         width: 120px;
         height: 120px;
-        background: url($cdn+'/weapp/logo.png') center / contain no-repeat;
+        background: url('./../../assets/logo.png') center / contain no-repeat;
       }
       .wechat {
         width: 200px;

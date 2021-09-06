@@ -723,3 +723,5 @@ RuixinApi.prototype.isInIOS = function()
 	var isiOS = !!str.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
 	return isiOS;
 }
+
+export default RuixinApi;

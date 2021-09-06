@@ -27,13 +27,6 @@ npm run serve
 - 通过 `npm run stage` 打包测试 , 执行 `staging`
 - 通过 `npm run build` 打包正式 , 执行 `production`
 
-```javascript
-"scripts": {
-  "serve": "vue-cli-service serve --open",
-  "stage": "vue-cli-service build --mode staging",
-  "build": "vue-cli-service build",
-}
-```
 
 ##### 配置介绍
 
@@ -44,55 +37,11 @@ npm run serve
 在项目根目录中新建`.env.*`
 
 - .env.development 本地开发环境配置
-
-```bash
-NODE_ENV='development'
-# must start with VUE_APP_
-VUE_APP_ENV = 'development'
-
-```
-
 - .env.staging 测试环境配置
-
-```bash
-NODE_ENV='production'
-# must start with VUE_APP_
-VUE_APP_ENV = 'staging'
-```
-
 - .env.production 正式环境配置
-
-```bash
- NODE_ENV='production'
-# must start with VUE_APP_
-VUE_APP_ENV = 'production'
-```
-```javascript
-// 根据环境引入不同配置 process.env.NODE_ENV
-const config = require('./env.' + process.env.VUE_APP_ENV)
-module.exports = config
-```
 
 配置对应环境的变量，拿本地环境文件 `env.development.js` 举例，用户可以根据需求修改
 
-```javascript
-// 本地环境配置
-module.exports = {
-  title: '系统',
-  baseUrl: 'http://localhost:8080', // 项目地址
-  baseApi: 'https://test.xxx.com/api', // 本地api请求地址
-  APPID: 'xxx',
-  APPSECRET: 'xxx'
-}
-```
-
-根据环境不同，变量就会不同了
-
-```javascript
-// 根据环境不同引入不同baseApi地址
-import { baseApi } from '@/config'
-console.log(baseApi)
-```
 ### 集成瑞信api
 
 Vue.prototype.$ruixin
@@ -137,21 +86,6 @@ module.exports = {
 
 项目在 `src/plugins/vant.js` 下统一管理组件，用哪个引入哪个，无需在页面里重复引用
 
-### Sass 全局样式
-
-如果遇到 `node-sass` 安装不成功，别放弃多试几次！！！
-
-每个页面自己对应的样式都写在自己的 .vue 文件之中 `scoped` 它顾名思义给 css 加了一个域的概念。
-
-```html
-<style lang="scss">
-  /* global styles */
-</style>
-
-<style lang="scss" scoped>
-  /* local styles */
-</style>
-```
 
 #### 目录结构
 
@@ -269,6 +203,11 @@ getUserInfo(params)
   .catch(() => {})
 ```
 
+### table 组件
+默认使用 vxe-table
+https://gitee.com/xuliangzhan_admin/vxe-table/
+
+
 ###  Webpack 4 vue.config.js 基础配置
 
 如果你的 `Vue Router` 模式是 hash
@@ -283,28 +222,6 @@ publicPath: './',
 publicPath: '/app/',
 ```
 
-```javascript
-const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV)
-
-module.exports = {
-  publicPath: './', // 署应用包时的基本 URL。 vue-router hash 模式使用
-  //  publicPath: '/app/', // 署应用包时的基本 URL。  vue-router history模式使用
-  outputDir: 'dist', //  生产环境构建文件的目录
-  assetsDir: 'static', //  outputDir的静态资源(js、css、img、fonts)目录
-  lintOnSave: !IS_PROD,
-  productionSourceMap: false, // 如果你不需要生产环境的 source map，可以将其设置为 false 以加速生产环境构建。
-  devServer: {
-    port: 8081, // 端口号
-    open: false, // 启动后打开浏览器
-    overlay: {
-      //  当出现编译器错误或警告时，在浏览器中显示全屏覆盖层
-      warnings: false,
-      errors: true
-    }
-    // ...
-  }
-}
-```
 
 ###  配置 alias 别名 
 
@@ -359,151 +276,9 @@ export function getUserInfo(params) {
 }
 ```
 
-### 配置 打包分析 
-
-```javascript
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-
-module.exports = {
-  chainWebpack: config => {
-    // 打包分析
-    if (IS_PROD) {
-      config.plugin('webpack-report').use(BundleAnalyzerPlugin, [
-        {
-          analyzerMode: 'static'
-        }
-      ])
-    }
-  }
-}
-```
-
-```bash
-npm run build
-```
-
-
-###  配置 externals 引入 cdn 资源
-
-这个版本 CDN 不再引入，我测试了一下使用引入 CDN 和不使用,不使用会比使用时间少。网上不少文章测试 CDN 速度块，这个开发者可
-以实际测试一下。
-
-另外项目中使用的是公共 CDN 不稳定，域名解析也是需要时间的（如果你要使用请尽量使用同一个域名）
-
-因为页面每次遇到`<script>`标签都会停下来解析执行，所以应该尽可能减少`<script>`标签的数量 `HTTP`请求存在一定的开销，100K
-的文件比 5 个 20K 的文件下载的更快，所以较少脚本数量也是很有必要的
-
-暂时还没有研究放到自己的 cdn 服务器上。
-
-```javascript
-const defaultSettings = require('./src/config/index.js')
-const name = defaultSettings.title || 'vue mobile template'
-const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV)
-
-// externals
-const externals = {
-  vue: 'Vue',
-  'vue-router': 'VueRouter',
-  vuex: 'Vuex',
-  vant: 'vant',
-  axios: 'axios'
-}
-// CDN外链，会插入到index.html中
-const cdn = {
-  // 开发环境
-  dev: {
-    css: [],
-    js: []
-  },
-  // 生产环境
-  build: {
-    css: ['https://cdn.jsdelivr.net/npm/vant@2.4.7/lib/index.css'],
-    js: [
-      'https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js',
-      'https://cdn.jsdelivr.net/npm/vue-router@3.1.5/dist/vue-router.min.js',
-      'https://cdn.jsdelivr.net/npm/axios@0.19.2/dist/axios.min.js',
-      'https://cdn.jsdelivr.net/npm/vuex@3.1.2/dist/vuex.min.js',
-      'https://cdn.jsdelivr.net/npm/vant@2.4.7/lib/index.min.js'
-    ]
-  }
-}
-module.exports = {
-  configureWebpack: config => {
-    config.name = name
-    // 为生产环境修改配置...
-    if (IS_PROD) {
-      // externals
-      config.externals = externals
-    }
-  },
-  chainWebpack: config => {
-    /**
-     * 添加CDN参数到htmlWebpackPlugin配置中
-     */
-    config.plugin('html').tap(args => {
-      if (IS_PROD) {
-        args[0].cdn = cdn.build
-      } else {
-        args[0].cdn = cdn.dev
-      }
-      return args
-    })
-  }
-}
-```
-
-在 public/index.html 中添加
-
-```javascript
-    <!-- 使用CDN的CSS文件 -->
-    <% for (var i in
-      htmlWebpackPlugin.options.cdn&&htmlWebpackPlugin.options.cdn.css) { %>
-      <link href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" rel="preload" as="style" />
-      <link href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" rel="stylesheet" />
-    <% } %>
-     <!-- 使用CDN加速的JS文件，配置在vue.config.js下 -->
-    <% for (var i in
-      htmlWebpackPlugin.options.cdn&&htmlWebpackPlugin.options.cdn.js) { %>
-      <script src="<%= htmlWebpackPlugin.options.cdn.js[i] %>"></script>
-    <% } %>
-```
-
-###  去掉 console.log 
-
-保留了测试环境和本地环境的 `console.log`
-
-```bash
-npm i -D babel-plugin-transform-remove-console
-```
-
-在 babel.config.js 中配置
-
-```javascript
-// 获取 VUE_APP_ENV 非 NODE_ENV，测试环境依然 console
-const IS_PROD = ['production', 'prod'].includes(process.env.VUE_APP_ENV)
-const plugins = [
-  [
-    'import',
-    {
-      libraryName: 'vant',
-      libraryDirectory: 'es',
-      style: true
-    },
-    'vant'
-  ]
-]
-// 去除 console.log
-if (IS_PROD) {
-  plugins.push('transform-remove-console')
-}
-
-module.exports = {
-  presets: [['@vue/cli-plugin-babel/preset', { useBuiltIns: 'entry' }]],
-  plugins
-}
-```
-
-
+### 配置了打包分析 
+### 可配置 externals 引入 cdn 资源 这里注释掉了
+### 去掉了正式环境 console.log 保留了测试环境和本地环境的 `console.log`
 ### splitChunks 单独打包第三方模块
 ```javascript
 module.exports = {
@@ -551,203 +326,3 @@ module.exports = {
 
 
 ###  添加 IE 兼容
-
-之前的方式 会报 `@babel/polyfill` is deprecated. Please, use required parts of `core-js` and
-`regenerator-runtime/runtime` separately
-
-`@babel/polyfill` 废弃，使用 `core-js` 和 `regenerator-runtime`
-
-```bash
-npm i --save core-js regenerator-runtime
-```
-
-在 `main.js` 中添加
-
-```javascript
-// 兼容 IE
-// https://github.com/zloirock/core-js/blob/master/docs/2019-03-19-core-js-3-babel-and-a-look-into-the-future.md#babelpolyfill
-import 'core-js/stable'
-import 'regenerator-runtime/runtime'
-```
-
-配置 `babel.config.js`
-
-```javascript
-const plugins = []
-
-module.exports = {
-  presets: [['@vue/cli-plugin-babel/preset', { useBuiltIns: 'usage', corejs: 3 }]],
-  plugins
-}
-```
-
-###  Eslint + Pettier 统一开发规范 
-
-VScode （版本 1.47.3）安装 `eslint` `prettier` `vetur` 插件 `.vue` 文件使用 vetur 进行格式化，其他使用`prettier`,后面会
-专门写个如何使用配合使用这三个玩意
-
-在文件 `.prettierrc` 里写 属于你的 pettier 规则
-
-```bash
-{
-   "printWidth": 120,
-   "tabWidth": 2,
-   "singleQuote": true,
-   "trailingComma": "none",
-   "semi": false,
-   "wrap_line_length": 120,
-   "wrap_attributes": "auto",
-   "proseWrap": "always",
-   "arrowParens": "avoid",
-   "bracketSpacing": false,
-   "jsxBracketSameLine": true,
-   "useTabs": false,
-   "overrides": [{
-       "files": ".prettierrc",
-       "options": {
-           "parser": "json"
-       }
-   }]
-}
-```
-
-Vscode setting.json 设置
-
-```bash
-    {
-  // 将设置放入此文件中以覆盖默认设置
-  "files.autoSave": "off",
-  // 控制字体系列。
-  "editor.fontFamily": "Consolas, 'Courier New', monospace,'宋体'",
-  "terminal.integrated.shell.windows": "C:\\Program Files\\Git\\bin\\bash.exe",
-  // 以像素为单位控制字号。
-  "editor.fontSize": 16,
-  // 控制选取范围是否有圆角
-  "editor.roundedSelection": false,
-  // 建议小组件的字号
-  "editor.suggestFontSize": 16,
-  // 在“打开的编辑器”窗格中显示的编辑器数量。将其设置为 0 可隐藏窗格。
-  "explorer.openEditors.visible": 0,
-  // 是否已启用自动刷新
-  "git.autorefresh": true,
-  // 以像素为单位控制终端的字号，这是 editor.fontSize 的默认值。
-  "terminal.integrated.fontSize": 14,
-  // 控制终端游标是否闪烁。
-  "terminal.integrated.cursorBlinking": true,
-  // 一个制表符等于的空格数。该设置在 `editor.detectIndentation` 启用时根据文件内容进行重写。
-  // Tab Size
-  "editor.tabSize": 2,
-  // By default, common template. Do not modify it!!!!!
-  "editor.formatOnType": true,
-  "window.zoomLevel": 0,
-  "editor.detectIndentation": false,
-  "css.fileExtensions": ["css", "scss"],
-  "files.associations": {
-    "*.string": "html",
-    "*.vue": "vue",
-    "*.wxss": "css",
-    "*.wxml": "wxml",
-    "*.wxs": "javascript",
-    "*.cjson": "jsonc",
-    "*.js": "javascript"
-  },
-  // 为指定的语法定义配置文件或使用带有特定规则的配置文件。
-  "emmet.syntaxProfiles": {
-    "vue-html": "html",
-    "vue": "html"
-  },
-  "search.exclude": {
-    "**/node_modules": true,
-    "**/bower_components": true
-  },
-  //保存时eslint自动修复错误
-  "editor.formatOnSave": true,
-  // Enable per-language
-  //配置 ESLint 检查的文件类型
-  "editor.quickSuggestions": {
-    "strings": true
-  },
-  // 添加 vue 支持
-  // 这里是针对vue文件的格式化设置，vue的规则在这里生效
-  "vetur.format.options.tabSize": 2,
-  "vetur.format.options.useTabs": false,
-  "vetur.format.defaultFormatter.html": "js-beautify-html",
-  "vetur.format.defaultFormatter.css": "prettier",
-  "vetur.format.defaultFormatter.scss": "prettier",
-  "vetur.format.defaultFormatter.postcss": "prettier",
-  "vetur.format.defaultFormatter.less": "prettier",
-  "vetur.format.defaultFormatter.js": "vscode-typescript",
-  "vetur.format.defaultFormatter.sass": "sass-formatter",
-  "vetur.format.defaultFormatter.ts": "prettier",
-  "vetur.format.defaultFormatterOptions": {
-    "js-beautify-html": {
-      "wrap_attributes": "aligned-multiple", // 超过150折行
-      "wrap-line-length": 150
-    },
-    // #vue组件中html代码格式化样式
-    "prettier": {
-      "printWidth": 120,
-      "tabWidth": 2,
-      "singleQuote": false,
-      "trailingComma": "none",
-      "semi": false,
-      "wrap_line_length": 120,
-      "wrap_attributes": "aligned-multiple", // 超过150折行
-      "proseWrap": "always",
-      "arrowParens": "avoid",
-      "bracketSpacing": true,
-      "jsxBracketSameLine": true,
-      "useTabs": false,
-      "overrides": [
-        {
-          "files": ".prettierrc",
-          "options": {
-            "parser": "json"
-          }
-        }
-      ]
-    }
-  },
-  // Enable per-language
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "vetur.validation.template": false,
-  "html.format.enable": false,
-  "json.format.enable": false,
-  "javascript.format.enable": false,
-  "typescript.format.enable": false,
-  "javascript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
-  "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[vue]": {
-    "editor.defaultFormatter": "octref.vetur"
-  },
-  "emmet.includeLanguages": {
-    "wxml": "html"
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  // 开启eslint自动修复js/ts功能
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
-  },
-  "minapp-vscode.disableAutoConfig": true,
-  "javascript.implicitProjectConfig.experimentalDecorators": true,
-  "editor.maxTokenizationLineLength": 200000
-}
-
-```
-# 鸣谢 ​
-
-[vue-cli4-config](https://github.com/staven630/vue-cli4-config)  
-[vue-element-admin](https://github.com/PanJiaChen/vue-element-admin)
-
