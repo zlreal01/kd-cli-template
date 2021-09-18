@@ -1,6 +1,8 @@
 <!-- home -->
 <template>
   <div class="index-container">
+    <oms2-header :title="$route.meta.title">
+    </oms2-header>
     <div class="warpper">
       <h1 class="demo-home__title"><img src="@/assets/logo.png" /><span> VUE H5开发模板</span></h1>
       <h2 class="demo-home__desc">
@@ -22,7 +24,8 @@ export default {
         'Webpack 4',
         'Vuex ',
         'Axios',
-        'Vue-router'
+        'Vue-router',
+        'ruixin'
       ]
     }
   },

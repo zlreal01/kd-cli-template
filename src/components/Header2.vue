@@ -14,36 +14,36 @@
 </template>
 
 <script>
-    /**
-     * oms2-header2
-     * @module components/header
-     * @desc 顶部导航 返回瑞信
-     * @param {string} [title] - 标题
-     * @param {slot} [left] - 显示在左侧区域
-     * @param {slot} [right] - 显示在右侧区域
-     *
-     * @example
-     * <oms2-header title="我是标题" fixed>
-     *   <button slot="left" @click="handleBack">返回</button>
-     *   <button slot="right"></button>
-     * </oms2-header>
-     */
-    export default {
-        name: 'oms2-header2',
-        props: {
-            title: String
-        },
-        mounted(){
-            // this.$ruixin.hideWebViewTitle({});
-        },
-        methods:{
-            //返回按钮
-            handleBack(){
-                this.$ruixin.closePage({});
-                //window.history.length > 1 ? this.$router.go(-1) : this.$ruixin.closePage({});
-            }
-        }
+/**
+ * oms2-header2
+ * @module components/header
+ * @desc 顶部导航 返回瑞信
+ * @param {string} [title] - 标题
+ * @param {slot} [left] - 显示在左侧区域
+ * @param {slot} [right] - 显示在右侧区域
+ *
+ * @example
+ * <oms2-header title="我是标题" fixed>
+ *   <button slot="left" @click="handleBack">返回</button>
+ *   <button slot="right"></button>
+ * </oms2-header>
+ */
+export default {
+  name: 'Oms2Header2',
+  props: {
+    title: String
+  },
+  mounted() {
+    // this.$ruixin.hideWebViewTitle({});
+  },
+  methods: {
+    // 返回按钮
+    handleBack() {
+      this.$ruixin.closePage({})
+      // window.history.length > 1 ? this.$router.go(-1) : this.$ruixin.closePage({});
     }
+  }
+}
 </script>
 
 <style lang="scss">

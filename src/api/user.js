@@ -11,11 +11,11 @@ export function login(data) {
   })
 }
 
-// 用户信息 post 方法
+// 用户信息  get 方法
 export function getUserInfo(data) {
   return request({
     url: api.UserInfo,
-    method: 'post',
+    method: 'get',
     data,
     hideloading: true
   })

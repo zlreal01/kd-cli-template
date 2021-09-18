@@ -19,12 +19,15 @@ import '@/assets/css/index.scss'
 // 移动端适配
 import 'lib-flexible/flexible.js'
 
+// 需要全局引入的自定义组件
+import '@/components'
+
 // filters
 import './filters'
 Vue.config.productionTip = false
 
 // 瑞信API
-import RuixinApi from './../static/ruixin/RuixinOpenAPI'
+import RuixinApi from './static/RuixinOpenAPI'
 const ruixinApi = new RuixinApi()
 Vue.prototype.$ruixin = ruixinApi
 

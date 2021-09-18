@@ -197,7 +197,7 @@ Vue.prototype.$cdn = $cdn
 // 请求接口
 import { getUserInfo } from '@/api/user.js'
 
-const params = { user: 'sunnie' }
+const params = { user: 'test' }
 getUserInfo(params)
   .then(() => {})
   .catch(() => {})
@@ -223,7 +223,7 @@ publicPath: '/app/',
 ```
 
 
-###  配置 alias 别名 
+####  配置 alias 别名 
 
 ```javascript
 const path = require('path')
@@ -243,7 +243,7 @@ module.exports = {
 }
 ```
 
-###   配置 proxy 跨域 
+####   配置 proxy 跨域 
 
 ```javascript
 module.exports = {
@@ -276,10 +276,10 @@ export function getUserInfo(params) {
 }
 ```
 
-### 配置了打包分析 
-### 可配置 externals 引入 cdn 资源 这里注释掉了
-### 去掉了正式环境 console.log 保留了测试环境和本地环境的 `console.log`
-### splitChunks 单独打包第三方模块
+#### 配置了打包分析 
+#### 可配置 externals 引入 cdn 资源 这里注释掉了
+#### 去掉了正式环境 console.log 保留了测试环境和本地环境的 `console.log`
+#### splitChunks 单独打包第三方模块
 ```javascript
 module.exports = {
   chainWebpack: config => {
@@ -325,4 +325,4 @@ module.exports = {
 ```
 
 
-###  添加 IE 兼容
+####  添加 IE 兼容

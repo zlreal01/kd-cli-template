@@ -5,15 +5,16 @@
       <div class="list">
         <div class="logo"></div>
         <div class="demo-home__title">VUE H5开发模板</div>
-        <div class="item">
-         VUE H5开发模板
-        </div>
-        <div class="item">VUE H5开发模板</div>
+         <div class="item">{{phone | hidePhone}}</div>
+         <div class="item">VUE H5开发模板</div>
         <div class="item">VUE H5开发模板</div>
         <div class="item">VUE H5开发模板</div>
         <div class="item">
           {{ userName }}
-          <van-button v-if="userName == ''" type="warning" size="small" @click="doDispatch">按钮</van-button>
+          <van-button  :loading = "loading" v-if="userName == ''"  loading-text = "提交中..." type="warning" size="small" @click="doDispatch">提交</van-button>
+        </div>
+        <div class="item">
+          <van-button  type="warning" size="small" @click="doCommit">提交</van-button>
         </div>
       </div>
     </div>
@@ -24,9 +25,12 @@
 // 请求接口
 import { getUserInfo } from '@/api/user.js'
 import { mapGetters } from 'vuex'
+import { Toast } from 'vant'
 export default {
   data() {
     return {
+      phone: '15982387746',
+      loading: false
     }
   },
   computed: {
@@ -39,17 +43,30 @@ export default {
     // 请求数据案例
     initData() {
       // 请求接口数据，仅作为展示，需要配置src->config下环境文件
-      const params = { user: 'sunnie' }
+      const params = { }
       getUserInfo(params)
         .then(() => { })
         .catch(() => { })
     },
     // Action 通过 store.dispatch 方法触发
     doDispatch() {
-      this.$store.dispatch('setUserName', '点击完成')
+      // Indicator.open()
+      this.loading = true
+      setTimeout(() => {
+        this.$store.dispatch('setUserName', '提交完成')
+        this.loading = false
+      }, 1000)
     },
-    goGithub(index) {
-      window.location.href = 'test'
+    doCommit() {
+      // this.$store.commit('showLoading')
+      Toast.loading({
+        message: '提交中...',
+        forbidClick: true,
+        loadingType: 'spinner'
+      })
+      setTimeout(() => {
+        Toast.clear()
+      }, 5000)
     }
   }
 }
